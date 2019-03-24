@@ -27,5 +27,3 @@ class EruptState(State):
 
     def __str__(self):
         return '爆发状态'
-
-

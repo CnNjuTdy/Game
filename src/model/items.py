@@ -9,6 +9,11 @@ class ItemList:
         self._max_size = max_size
         self._items = []
 
+    def get(self, index):
+        if index < len(self._items):
+            return self._items[index]
+        return None
+
     def swap(self, index, new_item):
         self._items[index] = new_item
 
@@ -18,4 +23,3 @@ class ItemList:
             return 1
         else:
             return 0
-

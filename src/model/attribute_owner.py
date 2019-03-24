@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # Time       : 2019/3/22 17:19
 # Author     : tangdaye
-# Description: 用于实现装饰者模式
+# Description: 所有有属性的父类
 from config import attribute_config
 
 

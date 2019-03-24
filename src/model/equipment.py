@@ -10,9 +10,6 @@ from config import game_config
 class Equipment(AttributeOwner):
     _config_name = 'equipment'
 
-    def __init__(self):
-        super().__init__()
-
     def __str__(self):
         return '装备'
 
@@ -43,6 +40,34 @@ class Armor(Equipment):
 
     def __str__(self):
         return '板甲'
+
+
+class Kaya(Equipment):
+    _config_name = 'kaya'
+
+    def __str__(self):
+        return '辉光'
+
+
+class PowerTreads(Equipment):
+    _config_name = 'power_treads'
+
+    def __str__(self):
+        return '动力鞋'
+
+
+class CrimsonGuard(Equipment):
+    _config_name = 'crimson_guard'
+
+    def __str__(self):
+        return '赤红甲'
+
+
+class Crystals(Equipment):
+    _config_name = 'crystals'
+
+    def __str__(self):
+        return '水晶剑'
 
 
 class EquipmentList(ItemList):

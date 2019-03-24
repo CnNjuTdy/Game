@@ -7,10 +7,13 @@ from model.equipment import EquipmentList
 from model.skill import SkillList
 from model.state import DefaultState
 from model.weapon import NoWeapon
-from pattern.observer import Subject
+
+from config import level_up_config
+
+from abc import abstractmethod
 
 
-class Role(Subject, AttributeOwner):
+class Role(AttributeOwner):
     """职业基类
     """
 
@@ -29,11 +32,29 @@ class Role(Subject, AttributeOwner):
             return attribute + self._weapon.get_attribute(name) + self._equipments.get_attribute(name)
         return self._weapon.get_attribute(name) + self._equipments.get_attribute(name)
 
-    # def attack(self):
-    #     self._state.attack(self)
-    #
-    # def be_attacked(self, attack_instance):
-    #     self._state.be_attacked(self, attack_instance)
+    def level_up(self):
+        t = level_up_config(self._config_name)
+        for k, v in t:
+            if k in self._attributes:
+                self._attributes[k] += v
+            else:
+                self._attributes[k] = v
+
+    @abstractmethod
+    def get_weapon(self, weapon):
+        pass
+
+    @abstractmethod
+    def get_skill(self, skill):
+        pass
+
+    @abstractmethod
+    def get_weapon_part(self, weapon_part):
+        pass
+
+    @abstractmethod
+    def get_equipment(self, equipment):
+        pass
 
     def __str__(self):
         return '职业'
