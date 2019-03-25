@@ -8,7 +8,7 @@ from model.skill import SkillList
 from model.state import DefaultState
 from model.weapon import NoWeapon
 
-from config import level_up_config
+from config import level_up_config, game_config
 
 from abc import abstractmethod
 
@@ -25,6 +25,9 @@ class Role(AttributeOwner):
         self._equipments = EquipmentList()
         self._skills = SkillList()
         self._state = DefaultState()
+        self._max_level = game_config('role_max_level')
+        self._level = 1
+        self._exp = 0
 
     def get_attribute(self, name):
         attribute = self._attributes.get(name)
@@ -33,6 +36,8 @@ class Role(AttributeOwner):
         return self._weapon.get_attribute(name) + self._equipments.get_attribute(name)
 
     def level_up(self):
+        if self._level == self._max_level:
+            return 'already full level'
         t = level_up_config(self._config_name)
         for k, v in t:
             if k in self._attributes:
@@ -40,21 +45,31 @@ class Role(AttributeOwner):
             else:
                 self._attributes[k] = v
 
-    @abstractmethod
     def get_weapon(self, weapon):
-        pass
+        if not weapon.is_suitable_weapon(type(self)):
+            return 'not suitable'
+        if not type(self._weapon) == NoWeapon:
+            return 'already has weapon'
+        self._weapon = weapon
+        # 通知view
+        return 'ok'
 
-    @abstractmethod
     def get_skill(self, skill):
-        pass
+        if not skill.is_suitable_weapon(self):
+            return 'not suitable'
+        t = self._skills.add(skill)
+        if not t:
+            return 'full skill'
+        return 'ok'
 
-    @abstractmethod
     def get_weapon_part(self, weapon_part):
-        pass
+        self._weapon.add_weapon_part(weapon_part)
 
-    @abstractmethod
     def get_equipment(self, equipment):
-        pass
+        t = self._equipments.add(equipment)
+        if t:
+            print('装备成功')  # 通知view
+        return t
 
     def __str__(self):
         return '职业'
@@ -80,7 +95,7 @@ class Warrior(Role):
         return '战士'
 
 
-class NPC(Role):
+class NPC(AttributeOwner):
     _config_name = 'npc'
 
     def __init__(self):
@@ -88,6 +103,14 @@ class NPC(Role):
 
     def __str__(self):
         return 'NPC'
+
+    def level_up(self):
+        t = level_up_config(self._config_name)
+        for k, v in t:
+            if k in self._attributes:
+                self._attributes[k] += v
+            else:
+                self._attributes[k] = v
 
 
 if __name__ == '__main__':

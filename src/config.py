@@ -101,7 +101,7 @@ class GameConfig:
 
     max_skill_length = 2
     max_equipment_length = 3
-    role_max_level = 3
+    role_max_level = 5
     skill_max_level = 3
 
     @classmethod
